@@ -38,7 +38,7 @@ srun ./merge.sh ./output_extended
 
 ```bash
 # get help on input parameters
-python ./adept_roofline.py --help
+python ./adept_rooflines.py --help
 
 # run adept_rooflines.py with correct parameters
 srun python ./adept_rooflines.py -f ./output_extended/Adept_F.csv --ftime 193.94 -r ./output_extended/Adept_R.csv --rtime 61.853 && ps2pdf ./adept_glob.eps && ps2pdf ./adept_shm.eps

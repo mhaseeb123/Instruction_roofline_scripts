@@ -420,7 +420,7 @@ if __name__ == '__main__':
     fig.show()
 
     # save figure
-    fig.savefig('./adept_glob.eps', format='eps', dpi=300)
+    fig.savefig('./adept_glob.pdf', format='pdf', dpi=300, bbox_inches = 'tight', pad_inches = 0.01)
 
 
     # --------------------------------------------------------------------------------------------------- #
@@ -502,4 +502,4 @@ if __name__ == '__main__':
     fig2.show()
 
     # save figure
-    fig2.savefig('./adept_shm.eps', format='eps', dpi=300)
+    fig2.savefig('./adept_shm.pdf', format='pdf', dpi=300, bbox_inches = 'tight', pad_inches = 0.01)
