@@ -41,7 +41,6 @@ csfont = {'fontname':'STIX Math'}
 #
 
 fm.findSystemFonts(fontpaths=None, fontext='ttf')
-fm._rebuild()
 flist = fm.get_fontconfig_fonts()
 names = [fm.FontProperties(fname=fname).get_name() for fname in flist]
 plt.rcParams["font.family"] = ['STIX Math', 'Times New Roman', 'Latin Modern Math', 'TeX Gyre Termes Math', 'DejaVu Sans', 'DejaVu Serif', 'Liberation Serif']
@@ -130,11 +129,15 @@ def plotKernelPerf(kname, axs, mark='o', label = True):
     # Compute Instruction Intensity (L1) for Mem Wall
     kname['global(ldst)'] = (kname['inst_executed_global_loads'] + kname['inst_executed_global_stores']) / (kname['gld_transactions'] + kname['gst_transactions'])
 
+    # print the ceiling
+    print(f"Ceiling({kname['name'].value}) = {kname['perf'].value}")
+
     # Plot labels
     if (label==True):
         axs.scatter([1e-6],[1e-6], color='red', marker='s', label='L1 (tot_inst)', zorder=90)
         axs.scatter([1e-6],[1e-6], color='limegreen', marker='s', label='L2 (tot_inst)', zorder=90)
         axs.scatter([1e-6],[1e-6], color='mediumblue', marker='s', label='HBM (tot_inst)', zorder=90)
+        axs.scatter([1e-6],[1e-6], color='darkorange', marker='s', label='global(ldst)', zorder=90)
 
     # make label
     axs.scatter([1e-6],[1e-6], marker=mark, label=kname['name'].value, color='black', edgecolors='black', facecolors='none', linewidths=1.5, zorder=90)
@@ -402,7 +405,7 @@ if __name__ == '__main__':
     ax.set_xscale('log', base=10)
     ax.set_yscale('log', base=10)
 
-    ax.grid(axis = 'both', linewidth='0.5', linestyle='--', which='both')
+    ax.grid(axis = 'both', linewidth='0.5', linestyle=':', which='both')
 
 
     ax.set_ylim(bottom=1e-3, top=1.3e3, emit=True)
@@ -420,7 +423,7 @@ if __name__ == '__main__':
     fig.show()
 
     # save figure
-    fig.savefig('./adept_glob.pdf', format='pdf', dpi=300, bbox_inches = 'tight', pad_inches = 0.01)
+    fig.savefig('./adept_glob.pdf', format='pdf', dpi=300, bbox_inches = 'tight', pad_inches = 0.02)
 
 
     # --------------------------------------------------------------------------------------------------- #
