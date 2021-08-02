@@ -118,8 +118,3 @@ SY = [sycl1, sycl2, sycl3]
 
 # plot bars for amino acid data
 plotBars(SY, CU, name = "dna")
-
-
-a1 = np.array(np.sum(np.array(sycl1)), np.sum(np.array(sycl2)), np.sum(np.array(sycl3)))
-
-a2 = np.array(np.sum(np.array(sycl1)) + 2.3124, np.sum(np.array(sycl2))+5.84, np.sum(np.array(sycl3))+3.25)
