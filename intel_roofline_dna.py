@@ -115,8 +115,8 @@ def plotKernelPerf(kname, axs, mark='o', label = True):
     # Plot labels
     if (label==True):
         axs.scatter([1e-6],[1e-6], color='red', marker='s', label='L3', zorder=90)
-        axs.scatter([1e-6],[1e-6], color='limegreen', marker='s', label='GTI', zorder=90)
-        axs.scatter([1e-6],[1e-6], color='mediumblue', marker='s', label='DRAM', zorder=90)
+        axs.scatter([1e-6],[1e-6], color='limegreen', marker='s', label='SLM', zorder=90)
+        axs.scatter([1e-6],[1e-6], color='mediumblue', marker='s', label='GTI', zorder=90)
 
     # make label
     axs.scatter([1e-6],[1e-6], marker=mark, label=kname['name'], color='black', edgecolors='black', facecolors='none', linewidths=1.5, zorder=90)
@@ -129,13 +129,13 @@ def plotKernelPerf(kname, axs, mark='o', label = True):
     # axs.plot(x, np.full(shape = len(x), fill_value=kname['perf_nopredication']), color='dimgray', linestyle=(0, (5, 5)), linewidth=1.5, zorder = 90)
 
     # plot l1
-    axs.scatter(kname['l1_ii'], kname['perf'], color='red', marker=mark, zorder=100)
+    axs.scatter(kname['l3_ii'], kname['perf'], color='red', marker=mark, zorder=100)
 
     # plot l2
-    axs.scatter(kname['l2_ii'], kname['perf'], color='limegreen', marker=mark, zorder=100)
+    axs.scatter(kname['slm_ii'], kname['perf'], color='limegreen', marker=mark, zorder=100)
 
     # plot HBM
-    axs.scatter(kname['hbm_ii'], kname['perf'], color='mediumblue', marker=mark, zorder=100)
+    axs.scatter(kname['gti_ii'], kname['perf'], color='mediumblue', marker=mark, zorder=100)
 
     # plot global (ldst)
     # axs.scatter(kname['global(ldst)'], adept_f['perf(ldst)'], marker=mark, color='darkorange', edgecolors='darkorange', facecolors='none', linewidths=1.5, zorder=150)
@@ -275,17 +275,26 @@ ax.plot(ldst_x, ldst_roof, color = 'black', linestyle =(0, (3, 1, 1, 1, 1, 1)), 
 adept_f = dict([])
 adept_r = dict([])
 
+# --------------------------------------------------------------------------------------------- #
+
 # Compute performance in GIPS
+
+# forward kernel (CHANGE ME ONLY)
 adept_f['perf']  = 23.611
+
+adept_f['l3_ii']  = 1.03
+adept_f['slm_ii']  = 0.716
+adept_f['gti_ii'] = 2609.3
+
+# reverse kernel (CHANGE ME ONLY)
+
 adept_r['perf']  = 21.011
 
-adept_f['l1_ii']  = 1.03
-adept_f['l2_ii']  = 0.716
-adept_f['hbm_ii'] = 2609.3
+adept_r['l3_ii']  = 0.905
+adept_r['slm_ii']  = 0.637
+adept_r['gti_ii'] = 2014.56
 
-adept_r['l1_ii']  = 0.905
-adept_r['l2_ii']  = 0.637
-adept_r['hbm_ii'] = 2014.56
+# --------------------------------------------------------------------------------------------- #
 
 # add kernel name
 adept_f['name'] = 'Adept_F'
