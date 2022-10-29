@@ -15,13 +15,13 @@ fi
 OPATH=${1}
 
 # list of kernels
-kernels=(Adept_F Adept_R)
+kernels=(SpSpGEMM)
 
 # list of metrics
-metric=(inst_integer inst_compute_ld_st ldst_executed inst_fp_64 inst_fp_32 inst_fp_16 flop_count_dp flop_count_sp flop_count_hp flop_count_dp_fma local_load_transactions local_store_transactions local_load_transactions_per_request local_store_transactions_per_request inst_executed_local_loads inst_executed_local_stores shared_load_transactions shared_store_transactions shared_load_transactions_per_request shared_store_transactions_per_request inst_executed_shared_loads inst_executed_shared_stores gst_transactions gld_transactions gld_transactions_per_request gst_transactions_per_request inst_executed_global_reductions inst_executed_global_loads inst_executed_global_stores l2_read_transactions l2_write_transactions dram_read_transactions dram_write_transactions sysmem_read_transactions sysmem_write_transactions ipc) 
+metric=(smsp__inst_executed.avg.per_cycle_active smsp__inst_executed.sum smsp__sass_thread_inst_executed_op_integer_pred_on.sum smsp__sass_thread_inst_executed_op_memory_pred_on.sum smsp__inst_executed_op_global_st.sum smsp__inst_executed_op_local_ld.sum smsp__inst_executed_op_local_st.sum smsp__inst_executed_op_shared_ld_pred_on_any.sum smsp__inst_executed_op_shared_st_pred_on_any.sum smsp__inst_executed_pipe_lsu.avg.pct_of_peak_sustained_active smsp__sass_thread_inst_executed_op_conversion_pred_on.sum smsp__sass_thread_inst_executed_op_control_pred_on.sum smsp__sass_thread_inst_executed_op_fp64_pred_on.sum smsp__sass_thread_inst_executed_op_fp32_pred_on.sum smsp__sass_thread_inst_executed_op_fp16_pred_on.sum smsp__sass_thread_inst_executed_op_dadd_pred_on.sum smsp__sass_thread_inst_executed_op_dmul_pred_on.sum smsp__sass_thread_inst_executed_op_dfma_pred_on.sum smsp__sass_thread_inst_executed_op_fadd_pred_on.sum smsp__sass_thread_inst_executed_op_fmul_pred_on.sum smsp__sass_thread_inst_executed_op_ffma_pred_on.sum  smsp__sass_thread_inst_executed_op_hadd_pred_on.sum smsp__sass_thread_inst_executed_op_hmul_pred_on.sum smsp__sass_thread_inst_executed_op_hfma_pred_on.sum l1tex__t_sectors_pipe_lsu_mem_local_op_ld.sum l1tex__t_sectors_pipe_lsu_mem_local_op_st.sum l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum l1tex__t_sectors_pipe_lsu_mem_global_op_st.sum l1tex__t_sectors_pipe_lsu_mem_global_op_ld.sum l1tex__average_t_sectors_per_request_pipe_lsu_mem_local_op_ld.ratio l1tex__average_t_sectors_per_request_pipe_lsu_mem_local_op_st.ratio l1tex__average_t_sectors_per_request_pipe_lsu_mem_global_op_ld.ratio l1tex__average_t_sectors_per_request_pipe_lsu_mem_global_op_st.ratio smsp__inst_executed_op_global_red.sum smsp__inst_executed_op_global_ld.sum  lts__t_sectors_op_write.sum lts__t_sectors_op_read.sum lts__t_sectors_op_atom.sum lts__t_sectors_op_red.sum dram__sectors_read.sum dram__sectors_write.sum lts__t_sectors_aperture_sysmem_op_read.sum lts__t_sectors_aperture_sysmem_op_write.sum smsp__sass_average_branch_targets_threads_uniform.pct smsp__thread_inst_executed_per_inst_executed.pct smsp__thread_inst_executed_per_inst_executed.ratio) 
 
 # list of events
-event=(inst_executed thread_inst_executed)
+event=(sm__inst_executed.sum smsp__thread_inst_executed.sum)
 
 # extract and append all of them in one file
 for kernel in ${kernels[@]}
@@ -37,7 +37,7 @@ do
 	for m in ${metric[@]}
 	do
 		echo $m
-		data=`grep -rin -E "${kernel}.*\"${m}\"" ${OPATH}/${kernel}_*.log | awk -F',' '{print $NF}'`  
+		data=`grep -rin -E "${kernel}.*\"${m}\"" ${OPATH}/${kernel}_*.log | awk -F'",' '{print $NF}' | sed 's/,//g' | sed 's/\"//g'`  
 		echo "${m},${data}" >> ${filename}.csv
 	done
 
@@ -45,7 +45,7 @@ do
 	for e in ${event[@]}
 	do
 		echo $e
-		data=`grep -rin -E "${kernel}.*\"${e}\"" ${OPATH}/${kernel}_event.log | awk -F',' '{print $NF}'`  
+		data=`grep -rin -E "${kernel}.*\"${e}\"" ${OPATH}/${kernel}_event.log | awk -F'",' '{print $NF}' | sed 's/,//g' | sed 's/\"//g'`  
 		echo "${e},${data}" >> ${filename}.csv
 	done
 
